@@ -1,0 +1,1930 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PGL - Rota Europa Vale do Paraíba | Agente de Cargas</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css">
+    <style>
+        .gradient-header {
+            background: linear-gradient(35deg, #1B5E20 -150%, #2E7D32 50%, #4CAF50 0%);
+        }
+        
+        .hero-section {
+            background: linear-gradient(rgba(46, 125, 50, 0.9), rgba(46, 125, 50, 0.9)), url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 800"><defs><pattern id="grid" width="40" height="40" patternUnits="userSpaceOnUse"><path d="M 40 0 L 0 0 0 40" fill="none" stroke="rgba(255,255,255,0.1)" stroke-width="1"/></pattern></defs><rect width="100%" height="100%" fill="url(%23grid)"/></svg>');
+            background-size: cover;
+            background-position: center;
+        }
+        
+        .section-title {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: #2E7D32;
+            margin-bottom: 3rem;
+            text-align: center;
+            position: relative;
+        }
+        
+        .section-title::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 80px;
+            height: 3px;
+            background: linear-gradient(90deg, #2E7D32, #4CAF50);
+        }
+        
+        .carousel-container {
+            position: relative;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+        }
+        
+        .carousel-slide {
+            display: none;
+            animation: fadeIn 0.5s ease-in-out;
+        }
+        
+        .carousel-slide.active {
+            display: block;
+        }
+        
+        .carousel-slide img {
+            transition: all 0.3s ease;
+            width: 100%;
+            height: 400px;
+            object-fit: cover;
+            object-position: center;
+            display: block;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        
+        .carousel-nav {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            background: rgba(46, 125, 50, 0.9);
+            color: white;
+            border: none;
+            padding: 15px;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 1.2rem;
+            transition: all 0.3s ease;
+            z-index: 10;
+            width: 50px;
+            height: 50px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .carousel-nav:hover {
+            background: rgba(46, 125, 50, 1);
+            transform: translateY(-50%) scale(1.1);
+        }
+        
+        .carousel-prev {
+            left: 30px;
+        }
+        
+        .carousel-next {
+            right: 30px;
+        }
+        
+        .carousel-indicators {
+            position: absolute;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: 10px;
+            z-index: 10;
+        }
+        
+        .carousel-indicator {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.5);
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .carousel-indicator.active {
+            background: white;
+            transform: scale(1.2);
+        }
+        
+        .calendar-container {
+            background: white;
+            border-radius: 15px;
+            padding: 2rem;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+        }
+        
+        .calendar-header {
+            display: flex !important;
+            justify-content: space-between !important;
+            align-items: center !important;
+            margin-bottom: 1rem;
+            flex-wrap: nowrap !important;
+            flex-direction: row !important;
+        }
+        
+        .calendar-nav-btn {
+            background: #2E7D32;
+            color: white;
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            flex-shrink: 0;
+        }
+        
+        .calendar-nav-btn:hover {
+            background: #1B5E20;
+            transform: translateY(-2px);
+        }
+        
+        .calendar-grid {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            gap: 1px;
+            background: #e0e0e0;
+            border-radius: 10px;
+            overflow: hidden;
+        }
+        
+        .calendar-day {
+            background: white;
+            padding: 1rem;
+            text-align: center;
+            min-height: 60px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            cursor: default;
+        }
+        
+        .calendar-day.other-month {
+            background: #f5f5f5;
+            color: #999;
+        }
+        
+        .calendar-day.completed {
+            background: #4CAF50;
+            color: white;
+            position: relative;
+        }
+        
+        .calendar-day.scheduled {
+            background: #2196F3;
+            color: white;
+            cursor: pointer;
+            position: relative;
+        }
+        
+        .calendar-day.scheduled:hover {
+            background: #1976D2;
+            transform: scale(1.05);
+        }
+        
+        .calendar-day.completed::after {
+            content: '✓';
+            position: absolute;
+            top: 5px;
+            right: 5px;
+            font-size: 0.8rem;
+        }
+        
+        .aircraft-card {
+            background: white;
+            border-radius: 15px;
+            padding: 2rem;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            transition: all 0.3s ease;
+        }
+        
+        .aircraft-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.15);
+        }
+        
+        .accordion-header {
+            background: #f8f9fa;
+            padding: 1rem;
+            border-radius: 10px;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+            transition: all 0.3s ease;
+        }
+        
+        .accordion-header:hover {
+            background: #e9ecef;
+        }
+        
+        .accordion-content {
+            display: none;
+            padding: 1rem;
+            background: #f8f9fa;
+            border-radius: 10px;
+            margin-top: 1rem;
+        }
+        
+        .accordion-content.active {
+            display: block;
+            animation: slideDown 0.3s ease;
+        }
+        
+        @keyframes slideDown {
+            from { opacity: 0; transform: translateY(-10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .feature-card {
+            background: white;
+            border-radius: 15px;
+            padding: 2rem;
+            text-align: center;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            transition: all 0.3s ease;
+        }
+        
+        .feature-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.15);
+        }
+        
+        .feature-icon {
+            font-size: 3rem;
+            color: #2E7D32;
+            margin-bottom: 1rem;
+        }
+        
+        .contact-section {
+            background: linear-gradient(35deg, #2E7D32 45%, #4CAF50 -50%);
+            color: white;
+        }
+        
+        .contact-card {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 15px;
+            padding: 2rem;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        
+        .frequency-badge {
+            display: inline-block;
+            background: #2E7D32;
+            color: white;
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            margin-top: 1rem;
+        }
+        
+        .pulse-animation {
+            animation: pulse 2s infinite;
+        }
+        
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+
+        /* NEW STYLES FOR FLIGHT SCHEDULE AND CAPACITY */
+        .flight-schedule-card {
+            background: linear-gradient(135deg, #2E7D32, #4CAF50);
+            border-radius: 20px;
+            padding: 2rem;
+            color: white;
+            box-shadow: 0 15px 35px rgba(46, 125, 50, 0.3);
+            margin-bottom: 2rem;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .flight-schedule-card::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -50%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(45deg, transparent, rgba(255,255,255,0.1), transparent);
+            transform: rotate(45deg);
+            animation: shine 3s infinite;
+        }
+        
+        @keyframes shine {
+            0% { transform: translateX(-100%) translateY(-100%) rotate(45deg); }
+            50% { transform: translateX(100%) translateY(100%) rotate(45deg); }
+            100% { transform: translateX(-100%) translateY(-100%) rotate(45deg); }
+        }
+        
+        .flight-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            margin-bottom: 0.75rem;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            transition: all 0.3s ease;
+        }
+        
+        .flight-item:hover {
+            background: rgba(255, 255, 255, 0.2);
+            transform: translateX(5px);
+        }
+        
+        .flight-item:last-child {
+            margin-bottom: 0;
+        }
+        
+        .flight-date {
+            font-size: 1.1rem;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+        }
+        
+        .flight-date i {
+            margin-right: 0.5rem;
+            color: #C8E6C9;
+        }
+        
+        .cutoff-date {
+            font-size: 0.9rem;
+            opacity: 0.9;
+            display: flex;
+            align-items: center;
+        }
+        
+        .cutoff-date i {
+            margin-right: 0.5rem;
+            color: #FFCDD2;
+        }
+        
+        .capacity-section {
+            background: white;
+            border-radius: 20px;
+            padding: 2rem;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            margin-top: 2rem;
+        }
+        
+        .capacity-header {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+        
+        .capacity-title {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: #2E7D32;
+            margin-bottom: 0.5rem;
+        }
+        
+        .capacity-subtitle {
+            color: #666;
+            font-size: 0.9rem;
+        }
+        
+        .capacity-bar-container {
+            background: #f0f0f0;
+            border-radius: 25px;
+            height: 40px;
+            position: relative;
+            overflow: hidden;
+            margin: 1.5rem 0;
+            box-shadow: inset 0 2px 4px rgba(0,0,0,0.1);
+        }
+        
+        .capacity-bar {
+    height: 100%;
+    background: linear-gradient(90deg, #FF6B6B, #FFE66D, #4ECDC4, #45B7D1);
+    border-radius: 25px;
+    transition: width 1s ease-in-out;
+    position: relative;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+    min-width: 60px;
+}
+        
+        .capacity-bar::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+            animation: capacityShine 2s infinite;
+        }
+        
+        @keyframes capacityShine {
+            0% { transform: translateX(-100%); }
+            100% { transform: translateX(100%); }
+        }
+        
+       .capacity-text {
+    position: absolute;
+    top: 50%;
+    right: 10px;
+    transform: translateY(-50%);
+    font-weight: bold;
+    color: white;
+    text-shadow: 2px 2px 4px rgba(0,0,0,0.8);
+    font-size: 0.9rem;
+    white-space: nowrap;
+    z-index: 2;
+}
+
+        
+        .capacity-details {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 1rem;
+            font-size: 0.9rem;
+        }
+        
+        .capacity-item {
+            text-align: center;
+            flex: 1;
+        }
+        
+        .capacity-value {
+            font-weight: bold;
+            font-size: 1.1rem;
+            margin-bottom: 0.25rem;
+        }
+        
+        .capacity-used {
+            color: #FF6B6B;
+        }
+        
+        .capacity-available {
+            color: #4CAF50;
+        }
+        
+        .capacity-total {
+            color: #2E7D32;
+        }
+        
+        .capacity-warning {
+            background: linear-gradient(135deg, #FF6B6B, #FF5722);
+            color: white;
+            padding: 1rem;
+            border-radius: 10px;
+            margin-top: 1rem;
+            text-align: center;
+            font-weight: 500;
+            display: none;
+        }
+        
+        .capacity-warning.show {
+            display: block;
+            animation: warningPulse 2s infinite;
+        }
+        
+        @keyframes warningPulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.02); }
+        }
+
+        /* Modal Styles */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            backdrop-filter: blur(5px);
+        }
+
+        .modal.active {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            animation: modalFadeIn 0.3s ease;
+        }
+
+        @keyframes modalFadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        .modal-content {
+            background: white;
+            border-radius: 20px;
+            padding: 2rem;
+            max-width: 600px;
+            width: 90%;
+            max-height: 90vh;
+            overflow-y: auto;
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.25);
+            animation: modalSlideIn 0.3s ease;
+        }
+
+        @keyframes modalSlideIn {
+            from { 
+                opacity: 0; 
+                transform: translateY(-50px) scale(0.9); 
+            }
+            to { 
+                opacity: 1; 
+                transform: translateY(0) scale(1); 
+            }
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+            padding-bottom: 1rem;
+            border-bottom: 2px solid #e0e0e0;
+        }
+
+        .modal-title {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: #2E7D32;
+            margin: 0;
+        }
+
+        .close-modal {
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            color: #666;
+            cursor: pointer;
+            padding: 0.5rem;
+            border-radius: 50%;
+            transition: all 0.3s ease;
+        }
+
+        .close-modal:hover {
+            background: #f5f5f5;
+            color: #333;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+            color: #333;
+        }
+
+        .form-input {
+            width: 100%;
+            padding: 0.75rem;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+        }
+
+        .form-input:focus {
+            outline: none;
+            border-color: #2E7D32;
+            box-shadow: 0 0 15px rgba(46, 125, 50, 0.2);
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+        }
+
+        .submit-btn {
+            background: linear-gradient(135deg, #2E7D32, #4CAF50);
+            color: white;
+            border: none;
+            padding: 1rem 2rem;
+            border-radius: 10px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            width: 100%;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .submit-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(46, 125, 50, 0.3);
+        }
+
+        .submit-btn:disabled {
+            opacity: 0.7;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .loading-spinner {
+            display: none;
+            width: 20px;
+            height: 20px;
+            border: 2px solid transparent;
+            border-top: 2px solid white;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin-right: 10px;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .success-message {
+            display: none;
+            text-align: center;
+            padding: 2rem;
+        }
+
+        .success-icon {
+            font-size: 4rem;
+            color: #4CAF50;
+            margin-bottom: 1rem;
+        }
+
+        .success-text {
+            font-size: 1.2rem;
+            color: #333;
+            margin-bottom: 0.5rem;
+        }
+
+        .success-subtext {
+            color: #666;
+            font-size: 1rem;
+        }
+
+        /* MEDIA QUERIES RESPONSIVAS */
+
+
+
+
+
+
+
+
+
+        
+        @media (max-width: 768px) {
+            
+            contact-section .grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .contact-card h3 {
+        font-size: 1rem;
+    }
+    
+    .contact-card {
+        padding: 1.5rem;
+    }
+
+
+
+
+             .capacity-text {
+        font-size: 0.75rem;
+        right: 8px;
+    }
+            
+            .form-row {
+                grid-template-columns: 1fr;
+            }
+            
+            .modal-content {
+                margin: 1rem;
+                padding: 1.5rem;
+            }
+            
+            .calendar-container {
+                padding: 1rem;
+                margin: 0 1rem;
+            }
+            
+            .calendar-day {
+                padding: 0.5rem;
+                min-height: 45px;
+                font-size: 0.9rem;
+            }
+            
+            .calendar-header h3 {
+                font-size: 1.5rem;
+                margin: 0;
+                flex: 1;
+                text-align: center;
+            }
+            
+            .calendar-nav-btn {
+                padding: 0.4rem 0.8rem;
+                font-size: 0.9rem;
+                min-width: 44px;
+                min-height: 44px;
+            }
+            
+            .section-title {
+                font-size: 2rem;
+                margin-bottom: 2rem;
+            }
+            
+            .carousel-slide img {
+                height: 250px;
+                object-fit: contain;
+                background: #f5f5f5;
+            }
+            
+            .carousel-nav {
+                width: 40px;
+                height: 40px;
+                padding: 0;
+                font-size: 1rem;
+            }
+            
+            .carousel-prev {
+                left: 15px;
+            }
+            
+            .carousel-next {
+                right: 15px;
+            }
+
+            .flight-item {
+                flex-direction: column;
+                text-align: center;
+                gap: 0.5rem;
+            }
+            
+            .flight-schedule-card {
+                padding: 1.5rem;
+            }
+            
+            .capacity-details {
+                flex-direction: column;
+                gap: 1rem;
+            }
+            
+            .capacity-item {
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                padding: 0.5rem;
+                background: #f8f9fa;
+                border-radius: 8px;
+            }
+        }
+
+
+.capacity-bar-container {
+        height: 50px;
+        margin: 2rem 0;
+    }
+    
+    .capacity-text {
+        font-size: 0.8rem;
+        font-weight: 900;
+    }
+    
+    .capacity-section {
+        padding: 1.5rem;
+    }
+
+
+
+
+        @media (max-width: 480px) {
+
+.capacity-text {
+        font-size: 0.7rem;
+        right: 5px;
+    }
+
+.contact-card {
+        padding: 1rem;
+    }
+    
+    .contact-card h3 {
+        font-size: 0.9rem;
+    }
+    
+    .contact-card span {
+        font-size: 0.8rem;
+    }
+
+
+            .calendar-container {
+                padding: 0.75rem;
+                margin: 0 0.5rem;
+            }
+            
+            .calendar-day {
+                padding: 0.3rem;
+                min-height: 40px;
+                font-size: 0.8rem;
+            }
+            
+            .calendar-header h3 {
+                font-size: 1.2rem;
+                flex: 1;
+                text-align: center;
+            }
+            
+            .calendar-nav-btn {
+                padding: 0.3rem 0.6rem;
+                font-size: 0.8rem;
+                min-width: 40px;
+                min-height: 40px;
+            }
+            
+            .section-title {
+                font-size: 1.8rem;
+                margin-bottom: 1.5rem;
+            }
+            
+            .hero-section h2 {
+                font-size: 2.5rem;
+            }
+            
+            .hero-section p {
+                font-size: 1rem;
+            }
+            
+            .frequency-badge {
+                font-size: 0.8rem;
+                padding: 0.4rem 0.8rem;
+                margin: 0.3rem;
+            }
+            
+            .carousel-slide img {
+                height: 200px;
+                object-fit: contain;
+                background: #f5f5f5;
+            }
+            
+            .carousel-nav {
+                width: 35px;
+                height: 35px;
+                padding: 0;
+                font-size: 0.9rem;
+            }
+            
+            .carousel-prev {
+                left: 10px;
+            }
+            
+            .carousel-next {
+                right: 10px;
+            }
+        }
+
+
+capacity-bar-container {
+        height: 45px;
+        margin: 1.5rem 0;
+    }
+    
+    .capacity-text {
+        font-size: 0.7rem;
+        font-weight: 900;
+    }
+    
+    .capacity-details {
+        font-size: 0.85rem;
+    }
+
+
+
+
+
+    </style>
+</head>
+
+<body class="bg-gray-50">
+    <!-- Header -->
+    <header class="gradient-header text-white py-6 shadow-lg">
+        <div class="container mx-auto px-6">
+            <div class="flex items-center justify-between">
+                <div class="flex items-center space-x-4">
+                    <img src="logo/pgl_logo.png" alt="PGL Logo" class="h-16 w-auto">
+                    <div>
+                        <h1 class="text-3xl font-bold"></h1>
+                        <p class="text-xl opacity-90"></p>
+                    </div>
+                </div>
+                <nav class="hidden md:flex space-x-6">
+                    <a href="#rota" class="hover:text-green-200 transition">Rota</a>
+                    <a href="#aeronave" class="hover:text-green-200 transition">Aeronave</a>
+                    <a href="#diferenciais" class="hover:text-green-200 transition">Diferenciais</a>
+                    <a href="#contato" class="hover:text-green-200 transition">Contato</a>
+                </nav>
+            </div>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero-section text-white py-20">
+        <div class="container mx-auto px-6 text-center">
+            <h2 class="text-5xl font-bold mb-6">Rota Europa - Vale do Paraíba</h2>
+            <p class="text-xl mb-8 max-w-3xl mx-auto">
+                A ponte entre a inovação europeia e o dinamismo industrial do Vale do Paraíba está mais forte do que nunca. Logística global com a inteligência local.
+            </p>
+            <div class="flex justify-center items-center space-x-4">
+                <div class="frequency-badge pulse-animation">
+                    <i class="fas fa-plane mr-2"></i>
+                    Frequência: 15 em 15 dias
+                </div>
+                <div class="frequency-badge">
+                    <i class="fas fa-calendar-alt mr-2"></i>
+                    Próximo voo: 21/08/2025
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Latest Shipment Gallery -->
+    <section class="py-16 bg-white">
+        <div class="container mx-auto px-6">
+            <h2 class="section-title">Logística de Ponta </h2>
+            <div class="carousel-container max-w-4xl mx-auto">
+                <div class="carousel-slide active">
+                    <img src="images/foto1.jpeg" alt="Boeing 757 com porta do nariz aberta" class="w-full h-96 object-contain bg-gray-100">
+                </div>
+                <div class="carousel-slide">
+                    <img src="images/foto2.jpg" alt="Empilhadeira carregando paletes" class="w-full h-96 object-contain bg-gray-100">
+                </div>
+                <div class="carousel-slide">
+                    <img src="images/foto3.jpg" alt="Aeronave Cargolux sendo carregada" class="w-full h-96 object-contain bg-gray-100">
+                </div>
+                <div class="carousel-slide">
+                    <img src="images/foto4.jpg" alt="Interior do compartimento de carga" class="w-full h-96 object-contain bg-gray-100">
+                </div>
+                <div class="carousel-slide">
+                    <img src="images/foto5.jpg" alt="Porta do nariz totalmente aberta" class="w-full h-96 object-contain bg-gray-100">
+                </div>
+                <div class="carousel-slide">
+                    <img src="images/foto6.jpg" alt="Contêineres ULD sendo posicionados" class="w-full h-96 object-contain bg-gray-100">
+                </div>
+                <div class="carousel-slide">
+                    <img src="images/foto7.jpg" alt="Trabalhadores com coletes de segurança" class="w-full h-96 object-contain bg-gray-100">
+                </div>
+                <div class="carousel-slide">
+                    <img src="images/foto8.jpg" alt="Vista aérea do carregamento" class="w-full h-96 object-contain bg-gray-100">
+                </div>
+                <div class="carousel-slide">
+                    <img src="images/foto9.jpg" alt="Estágio final do carregamento" class="w-full h-96 object-contain bg-gray-100">
+                </div>
+                
+                <button class="carousel-nav carousel-prev" onclick="changeSlide(-1)">
+                    <i class="fas fa-chevron-left"></i>
+                </button>
+                <button class="carousel-nav carousel-next" onclick="changeSlide(1)">
+                    <i class="fas fa-chevron-right"></i>
+                </button>
+                
+                <div class="carousel-indicators">
+                    <span class="carousel-indicator active" onclick="goToSlide(0)"></span>
+                    <span class="carousel-indicator" onclick="goToSlide(1)"></span>
+                    <span class="carousel-indicator" onclick="goToSlide(2)"></span>
+                    <span class="carousel-indicator" onclick="goToSlide(3)"></span>
+                    <span class="carousel-indicator" onclick="goToSlide(4)"></span>
+                    <span class="carousel-indicator" onclick="goToSlide(5)"></span>
+                    <span class="carousel-indicator" onclick="goToSlide(6)"></span>
+                    <span class="carousel-indicator" onclick="goToSlide(7)"></span>
+                    <span class="carousel-indicator" onclick="goToSlide(8)"></span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Flight Schedule -->
+    <section class="py-16 bg-gray-100" id="rota">
+        <div class="container mx-auto px-6">
+            <h2 class="section-title">Programação</h2>
+            
+            <!-- NEW: Flight Schedule Card -->
+            <div class="max-w-4xl mx-auto mb-8">
+                <div class="flight-schedule-card">
+                    <div class="text-center mb-6">
+                        <h3 class="text-2xl font-bold mb-2">
+                            <i class="fas fa-plane-departure mr-3"></i>
+                            Próximos Voos 2025
+                        </h3>
+                        <p class="opacity-90">Programe suas cargas com antecedência</p>
+                    </div>
+                    
+                    <div class="space-y-3">
+                        <div class="flight-item" onclick="openModalForDate('03/09/2025')">
+                            <div class="flight-date">
+                                <i class="fas fa-calendar"></i>
+                                03/09/2025
+                            </div>
+
+
+
+
+                            <div>   
+                            <div class="cutoff-date">
+                                <i class="fas fa-clock"></i>
+                                Cut Off documental: 29/08 - 48horas
+                            </div>
+                            <div class="cutoff-date">
+                                <i class="fas fa-clock"></i>
+                                Cut Off da carga: 24 horas
+                            </div>
+                            </div> 
+
+
+
+
+
+
+
+
+                        </div>
+                        
+                        <div class="flight-item" onclick="openModalForDate('18/09/2025')">
+                            <div class="flight-date">
+                                <i class="fas fa-calendar"></i>
+                                18/09/2025
+                            </div>
+
+
+
+
+                            <div>   
+                            <div class="cutoff-date">
+                                <i class="fas fa-clock"></i>
+                                Cut Off documental: 15/09 - 48horas
+                            </div>
+                            <div class="cutoff-date">
+                                <i class="fas fa-clock"></i>
+                                Cut Off da carga: 24 horas
+                            </div>
+                            </div> 
+
+
+
+
+                        </div>
+                        
+                        <div class="flight-item" onclick="openModalForDate('01/10/2025')">
+                            <div class="flight-date">
+                                <i class="fas fa-calendar"></i>
+                                01/10/2025
+                            </div>
+
+
+
+                            
+                            <div>   
+                            <div class="cutoff-date">
+                                <i class="fas fa-clock"></i>
+                                Cut Off documental: 27/09 - 48horas
+                            </div>
+                            <div class="cutoff-date">
+                                <i class="fas fa-clock"></i>
+                                Cut Off da carga: 24 horas
+                            </div>
+                            </div> 
+
+
+
+
+
+                        </div>
+                        
+                        <div class="flight-item" onclick="openModalForDate('17/10/2025')">
+                            <div class="flight-date">
+                                <i class="fas fa-calendar"></i>
+                                17/10/2025
+                            </div>
+
+
+
+
+                            <div>   
+                            <div class="cutoff-date">
+                                <i class="fas fa-clock"></i>
+                                Cut Off documental: 13/10 - 48horas
+                            </div>
+                            <div class="cutoff-date">
+                                <i class="fas fa-clock"></i>
+                                Cut Off da carga: 24 horas
+                            </div>
+                            </div> 
+
+
+
+
+
+                        </div>
+                        
+                        <div class="flight-item" onclick="openModalForDate('29/10/2025')">
+                            <div class="flight-date">
+                                <i class="fas fa-calendar"></i>
+                                29/10/2025
+                            </div>
+
+
+
+
+                            <div>   
+                            <div class="cutoff-date">
+                                <i class="fas fa-clock"></i>
+                                Cut Off documental: 25/10 - 48horas
+                            </div>
+                            <div class="cutoff-date">
+                                <i class="fas fa-clock"></i>
+                                Cut Off da carga: 24 horas
+                            </div>
+                            </div> 
+
+
+
+
+
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- NEW: Capacity Monitor -->
+                <div class="capacity-section">
+                    <div class="capacity-header">
+                        <div class="capacity-title">
+                            <i class="fas fa-weight-hanging mr-2"></i>
+                            Capacidade Lower Deck
+                        </div>
+                        <div class="capacity-subtitle">Monitoramento da capacidade de carga disponível</div>
+                    </div>
+                    
+                    <div class="capacity-bar-container">
+                        <div class="capacity-bar" id="capacityBar" style="width: 65%;">
+                            <div class="capacity-text" id="capacityText">13.000kg / 20.000kg (65%)</div>
+                        </div>
+                    </div>
+                    
+                    <div class="capacity-details">
+                        <div class="capacity-item">
+                            <div class="capacity-value capacity-used" id="usedCapacity">13.000kg</div>
+                            <div>Ocupado</div>
+                        </div>
+                        <div class="capacity-item">
+                            <div class="capacity-value capacity-available" id="availableCapacity">7.000kg</div>
+                            <div>Disponível</div>
+                        </div>
+                        <div class="capacity-item">
+                            <div class="capacity-value capacity-total">20.000kg</div>
+                            <div>Capacidade Total</div>
+                        </div>
+                    </div>
+                    
+                    <div class="capacity-warning" id="capacityWarning">
+                        <i class="fas fa-exclamation-triangle mr-2"></i>
+                        Atenção: Capacidade quase esgotada! Reserve seu espaço rapidamente.
+                    </div>
+                    
+                    <div class="text-center mt-4 text-sm text-gray-600">
+                        <i class="fas fa-info-circle mr-1"></i>
+                        Entre em contato para informações precisas.
+                    </div>
+                </div>
+            </div>
+            
+            <div class="max-w-4xl mx-auto">
+                <div class="calendar-container">
+                    <div class="calendar-header">
+                        <button class="calendar-nav-btn" onclick="prevMonth()">
+                            <i class="fas fa-chevron-left"></i>
+                        </button>
+                        <h3 class="text-2xl font-bold" id="currentMonth">Julho 2025</h3>
+                        <button class="calendar-nav-btn" onclick="nextMonth()">
+                            <i class="fas fa-chevron-right"></i>
+                        </button>
+                    </div>
+                    
+                    <div class="calendar-grid" id="calendarGrid">
+                        <!-- Calendar will be generated by JavaScript -->
+                    </div>
+                    
+                    <div class="mt-6 flex flex-wrap justify-center gap-4 text-sm">
+                        <div class="flex items-center">
+                            <div class="w-4 h-4 bg-green-500 rounded mr-2 flex-shrink-0"></div>
+                            <span>Embarque Realizado</span>
+                        </div>
+                        <div class="flex items-center">
+                            <div class="w-4 h-4 bg-blue-500 rounded mr-2 flex-shrink-0"></div>
+                            <span class="text-center">Próximos Voos - Clique para solicitar seu embarque</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Aircraft Specifications -->
+    <section class="py-16 bg-white" id="aeronave">
+        <div class="container mx-auto px-6">
+            <h2 class="section-title">Especificações da Aeronave</h2>
+            <div class="max-w-4xl mx-auto">
+                <div class="aircraft-card">
+                    <div class="accordion-header" onclick="toggleAccordion('aircraft-specs')">
+                        <div class="flex items-center space-x-4">
+                            <i class="fas fa-plane text-2xl text-green-600"></i>
+                            <div>
+                                <h3 class="text-xl font-bold">Boeing 747 Nose Door - Cargolux</h3>
+                                <p class="text-gray-600">Aeronave cargueira de alta capacidade</p>
+                            </div>
+                        </div>
+                        <i class="fas fa-chevron-down text-green-600" id="aircraft-specs-icon"></i>
+                    </div>
+                    
+                    <div class="accordion-content" id="aircraft-specs-content">
+                        <div class="grid md:grid-cols-2 gap-6">
+                            <div>
+                                <h4 class="font-bold text-lg mb-3 text-green-600">Especificações Técnicas</h4>
+                                <ul class="space-y-2">
+                                    <li><strong>Modelo:</strong> Boeing 747-200F</li>
+                                    <li><strong>Capacidade de Carga:</strong> 39,780 kg</li>
+                                    <li><strong>Volume de Carga:</strong> 239 m³</li>
+                                    <li><strong>Comprimento:</strong> 47.3 m</li>
+                                    <li><strong>Envergadura:</strong> 38.1 m</li>
+                                    <li><strong>Altura:</strong> 13.6 m</li>
+                                </ul>
+                            </div>
+                            <div>
+                                <h4 class="font-bold text-lg mb-3 text-green-600">Características Especiais</h4>
+                                <ul class="space-y-2">
+                                    <li><strong>Porta do Nariz:</strong> Abertura frontal para carga oversized</li>
+                                    <li><strong>Operadora:</strong> Cargolux Airlines</li>
+                                    <li><strong>Certificações:</strong> OEA, IATA, ICAO, FAA</li>
+                                    <li><strong>Compartimentos:</strong> Main deck e lower deck</li>
+                                    <li><strong>Sistemas:</strong> Controle de temperatura</li>
+                                    <li><strong>Segurança:</strong> Monitoramento 24/7</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Differentials -->
+    <section class="py-16 bg-gray-100" id="diferenciais">
+        <div class="container mx-auto px-6">
+            <h2 class="section-title">Nossos Diferenciais</h2>
+            <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
+                <div class="feature-card">
+                    <i class="fas fa-clock feature-icon"></i>
+                    <h3 class="text-xl font-bold mb-3">Rápido</h3>
+                    <p class="text-gray-600">Transporte expresso com tempos de trânsito otimizados e frequência regular.</p>
+                </div>
+                
+                <div class="feature-card">
+                    <i class="fas fa-shield-alt feature-icon"></i>
+                    <h3 class="text-xl font-bold mb-3">Seguro</h3>
+                    <p class="text-gray-600">Máxima segurança com rastreamento em tempo real e seguros abrangentes.</p>
+                </div>
+                
+                <div class="feature-card">
+                    <i class="fas fa-dollar-sign feature-icon"></i>
+                    <h3 class="text-xl font-bold mb-3">Preço Competitivo</h3>
+                    <p class="text-gray-600">Tarifas competitivas sem comprometer a qualidade do serviço.</p>
+                </div>
+                
+                <div class="feature-card">
+                    <i class="fas fa-users feature-icon"></i>
+                    <h3 class="text-xl font-bold mb-3">Multicliente</h3>
+                    <p class="text-gray-600">Atendimento personalizado para diversos segmentos e tipos de carga.</p>
+                </div>
+            </div>
+            
+            <div class="mt-12 text-center">
+                <div class="bg-white rounded-lg p-8 shadow-lg max-w-3xl mx-auto">
+                    <h3 class="text-2xl font-bold mb-4 text-green-600">Por que escolher nossa rota?</h3>
+                    <div class="grid md:grid-cols-3 gap-6 text-left">
+                        <div>
+                            <h4 class="font-bold mb-2">Conectividade</h4>
+                            <p class="text-sm text-gray-600">Ligação direta entre principais centros industriais europeus e o Vale do Paraíba.</p>
+                        </div>
+                        <div>
+                            <h4 class="font-bold mb-2">Eficiência</h4>
+                            <p class="text-sm text-gray-600">Operações streamlined com menos conexões e maior velocidade.</p>
+                        </div>
+                        <div>
+                            <h4 class="font-bold mb-2">Suporte</h4>
+                            <p class="text-sm text-gray-600">Equipe especializada disponível 24/7 para suporte completo.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact -->
+    <section class="contact-section py-16" id="contato">
+    <div class="container mx-auto px-6">
+        <h2 class="section-title text-white">Entre em Contato</h2>
+        <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-6 max-w-7xl mx-auto">
+            <!-- São Paulo - Matriz -->
+            <div class="contact-card">
+                <h3 class="text-lg font-bold mb-3 text-center">
+                    <i class="fas fa-building mr-2"></i>
+                    SÃO PAULO - MATRIZ
+                </h3>
+                <div class="space-y-2 text-sm">
+                    <div class="flex items-start">
+                        <i class="fas fa-map-marker-alt mr-2 mt-1 flex-shrink-0"></i>
+                        <span>Av. Chedid Jafet, 222
+
+                        Bloco D, Conj. 51 e 52<br>
+                        
+                        Vila Olímpia, São Paulo, SP<br>
+                        Telefone: +55 (11) 5592-2414</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Santos - Filial -->
+            <div class="contact-card">
+                <h3 class="text-lg font-bold mb-3 text-center">
+                    <i class="fas fa-anchor mr-2"></i>
+                    SANTOS - FILIAL
+                </h3>
+                <div class="space-y-2 text-sm">
+                    <div class="flex items-start">
+                        <i class="fas fa-map-marker-alt mr-2 mt-1 flex-shrink-0"></i>
+                        <span>Alameda Armênio Mendes, 66 - Salas: 702/703/704 - 7º Anda<br>
+                        Aparecida - Santos, SP, 11035-260<br>
+                        Telefone: +55 (13) 3279-3800</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Guarulhos - Filial -->
+            <div class="contact-card">
+                <h3 class="text-lg font-bold mb-3 text-center">
+                    <i class="fas fa-plane mr-2"></i>
+                    GUARULHOS - FILIAL
+                </h3>
+                <div class="space-y-2 text-sm">
+                    <div class="flex items-start">
+                        <i class="fas fa-map-marker-alt mr-2 mt-1 flex-shrink-0"></i>
+                        <span>Rodovia Hélio Smith, s/n
+
+                        Aeroporto Internacional de Guarulhos<br>
+                        Prédio Teca, 3 º andar, Sala 3.19<br>
+                        Prédio TECA-1, Andar, Sala 1379<br>
+                        
+                        Telefone: +55 (11) 2445-5120</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Rio de Janeiro - Filial -->
+            <div class="contact-card">
+                <h3 class="text-lg font-bold mb-3 text-center">
+                    <i class="fas fa-mountain mr-2"></i>
+                    RIO DE JANEIRO - FILIAL
+                </h3>
+                <div class="space-y-2 text-sm">
+                    <div class="flex items-start">
+                        <i class="fas fa-map-marker-alt mr-2 mt-1 flex-shrink-0"></i>
+                        <span>Rua Visconde de Piraja, nº 495 - Sala 608<br>
+                        Ipanema - Rio de Janeiro<br>
+                        CEP 22410-002</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Segunda linha com escritórios adicionais -->
+        <div class="grid md:grid-cols-2 gap-6 max-w-4xl mx-auto mt-8">
+            <!-- São José dos Campos - Filial -->
+            <div class="contact-card">
+                <h3 class="text-lg font-bold mb-3 text-center">
+                    <i class="fas fa-industry mr-2"></i>
+                    SÃO JOSÉ DOS CAMPOS - FILIAL
+                </h3>
+                <div class="space-y-2 text-sm">
+                    <div class="flex items-start">
+                        <i class="fas fa-map-marker-alt mr-2 mt-1 flex-shrink-0"></i>
+                        <span>Avenida Salmão, nº 325, 8º Andar<br>
+                        Parque Residencial Aquarius São José dos Campos-SP,<br>
+                        CEP 12246-260<br>
+                        Telefone: +55 (12) 3932-8100</span>
+                    </div>
+                   
+                </div>
+            </div>
+
+            <!-- Curitiba - Filial -->
+            <div class="contact-card">
+                <h3 class="text-lg font-bold mb-3 text-center">
+                    <i class="fas fa-tree mr-2"></i>
+                    CURITIBA - FILIAL
+                </h3>
+                <div class="space-y-2 text-sm">
+                    <div class="flex items-start">
+                        <i class="fas fa-map-marker-alt mr-2 mt-1 flex-shrink-0"></i>
+                        <span>Rua Dr. Manoel Pedro, 365, sala 402<br>
+                        Cabral, Curitiba, PR, 80035-030<br>
+                        Telefone: +55 (41) 3527-0977</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Informação adicional -->
+        
+    </div>
+</section>
+
+
+    <!-- Footer -->
+    <footer class="bg-gray-800 text-white py-8">
+        <div class="container mx-auto px-6">
+            <div class="grid md:grid-cols-3 gap-8">
+                <div>
+                    <h4 class="font-bold mb-3">PGL</h4>
+                    <p class="text-gray-400">Uma empresa especializada e certificada em Transporte e Logística, atuando com uma estrutura mundial.</p>
+                </div>
+                <div>
+                    <h4 class="font-bold mb-3">Serviços</h4>
+                    <ul class="space-y-2 text-gray-400">
+                        <li>Transporte Aéreo</li>
+                        <li>Logística Internacional</li>
+                        <li>Consultoria Aduaneira</li>
+                        <li>Seguro de Cargas</li>
+                    </ul>
+                </div>
+              
+            </div>
+            <div class="border-t border-gray-700 mt-8 pt-8 text-center text-gray-400">
+                <p>&copy; 2025 PGL Agente de Cargas. Todos os direitos reservados.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Modal for Cargo Request -->
+    <div id="cargoModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 class="modal-title mb-4">Informar valor CIF e outros detalhes da carga no campo observações</h2>  
+                <button type="button" class="close-modal" onclick="closeModal()">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+
+            <div id="modalForm">
+                <div class="mb-4 text-center">
+                    <div class="bg-blue-100 p-3 rounded-lg">
+                        <i class="fas fa-plane text-blue-600"></i>
+                        <span class="text-blue-800 font-semibold ml-2">Voo selecionado: <span id="selectedFlightDate"></span></span>
+                    </div>
+                </div>
+
+                <form id="cargoForm" action="https://formspree.io/f/xpwlnren" method="POST">
+                    <!-- Hidden fields for email routing -->
+                    <input type="hidden" name="_to" value="reinaldo.lourenco@pglbr.com.br,thiago.bianchi@pglbr.com.br">
+                    <input type="hidden" name="_subject" value="Nova Solicitação de Carga - PGL Rota Europa">
+                    <input type="hidden" name="data_voo" id="hiddenFlightDate">
+                    
+                    <div class="form-group">
+                        <label class="form-label" for="nome">
+                            <i class="fas fa-user mr-2"></i>Nome Completo *
+                        </label>
+                        <input type="text" id="nome" name="nome" class="form-input" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label" for="email">
+                            <i class="fas fa-envelope mr-2"></i>Email *
+                        </label>
+                        <input type="email" id="email" name="email" class="form-input" required>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label class="form-label" for="empresa">
+                                <i class="fas fa-building mr-2"></i>Empresa
+                            </label>
+                            <input type="text" id="empresa" name="empresa" class="form-input">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label" for="telefone">
+                                <i class="fas fa-phone mr-2"></i>Telefone *
+                            </label>
+                            <input type="tel" id="telefone" name="telefone" class="form-input" required>
+                        </div>
+                    </div>
+
+                    <div class="mb-4">
+                        <h3 class="text-lg font-semibold text-gray-800 mb-3 flex items-center">
+                            <i class="fas fa-box mr-2"></i>Dimensões da Carga
+                        </h3>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label class="form-label" for="comprimento">
+                                <i class="fas fa-ruler-horizontal mr-2"></i>Comprimento (cm) *
+                            </label>
+                            <input type="number" id="comprimento" name="comprimento" class="form-input" min="1" step="0.1" required>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label" for="largura">
+                                <i class="fas fa-ruler mr-2"></i>Largura (cm) *
+                            </label>
+                            <input type="number" id="largura" name="largura" class="form-input" min="1" step="0.1" required>
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label class="form-label" for="altura">
+                                <i class="fas fa-ruler-vertical mr-2"></i>Altura (cm) *
+                            </label>
+                            <input type="number" id="altura" name="altura" class="form-input" min="1" step="0.1" required>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label" for="peso">
+                                <i class="fas fa-weight-hanging mr-2"></i>Peso (kg) *
+                            </label>
+                            <input type="number" id="peso" name="peso" class="form-input" min="0.1" step="0.1" required>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label" for="observacoes">
+                            <i class="fas fa-comment mr-2"></i>Observações sobre a carga
+                        </label>
+                        <textarea id="observacoes" name="observacoes" class="form-input" rows="3" placeholder="Descreva qualquer informação adicional sobre a carga..."></textarea>
+                    </div>
+
+                    <button type="submit" class="submit-btn">
+                        <span class="loading-spinner"></span>
+                        <span class="btn-text">Enviar Solicitação</span>
+                    </button>
+                </form>
+            </div>
+
+            <div id="successMessage" class="success-message">
+                <div class="success-icon">
+                    <i class="fas fa-check-circle"></i>
+                </div>
+                <div class="success-text">Solicitação Enviada com Sucesso!</div>
+                <div class="success-subtext">Sua demanda será processada e em breve retornaremos com maiores detalhes.</div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // CAPACITIES CONFIGURATION - EDIT HERE TO UPDATE CAPACITY
+        const CAPACITY_CONFIG = {
+            totalCapacity: 20000, // Total capacity in kg
+            usedCapacity: 6000,  // Used capacity in kg - UPDATE THIS VALUE MANUALLY
+            warningThreshold: 85  // Show warning when capacity reaches this percentage
+        };
+
+        // FLIGHT DATES CONFIGURATION - ADD NEW FLIGHTS HERE
+        const UPCOMING_FLIGHTS = [
+            { date: '03/09/2025', cutoff: '29/08' },
+            { date: '18/09/2025', cutoff: '15/09' },
+            { date: '01/10/2025', cutoff: '27/09' },
+            { date: '17/10/2025', cutoff: '13/10' },
+            { date: '29/10/2025', cutoff: '25/10' }
+            // ADD NEW FLIGHTS HERE IN THE FUTURE
+            // { date: 'DD/MM/YYYY', cutoff: 'DD/MM' }
+        ];
+
+        // Function to update capacity display
+        function updateCapacityDisplay() {
+            const { totalCapacity, usedCapacity } = CAPACITY_CONFIG;
+            const availableCapacity = totalCapacity - usedCapacity;
+            const usagePercentage = Math.max(25, Math.round((usedCapacity / totalCapacity) * 100));
+            
+            // Update capacity bar
+            const capacityBar = document.getElementById('capacityBar');
+            const capacityText = document.getElementById('capacityText');
+            capacityBar.style.width = `${usagePercentage}%`;
+            capacityText.textContent = `${usedCapacity.toLocaleString()}kg / ${totalCapacity.toLocaleString()}kg (${usagePercentage}%)`;
+
+            if (usagePercentage < 50) {
+    capacityText.style.right = '10px';
+    capacityText.style.left = 'auto';
+    capacityText.style.color = '#666';
+    capacityText.style.textShadow = '1px 1px 2px rgba(255,255,255,0.8)';
+} else {
+    capacityText.style.right = '10px';
+    capacityText.style.left = 'auto';
+    capacityText.style.color = 'white';
+    capacityText.style.textShadow = '2px 2px 4px rgba(0,0,0,0.8)';
+}
+            
+            // Update capacity details
+            document.getElementById('usedCapacity').textContent = `${usedCapacity.toLocaleString()}kg`;
+            document.getElementById('availableCapacity').textContent = `${availableCapacity.toLocaleString()}kg`;
+            
+            // Show warning if capacity is high
+            const warningElement = document.getElementById('capacityWarning');
+            if (usagePercentage >= CAPACITY_CONFIG.warningThreshold) {
+                warningElement.classList.add('show');
+            } else {
+                warningElement.classList.remove('show');
+            }
+        }
+
+        // Function to open modal for specific date
+        function openModalForDate(dateString) {
+            const modal = document.getElementById('cargoModal');
+            const selectedFlightDateElement = document.getElementById('selectedFlightDate');
+            const hiddenFlightDateElement = document.getElementById('hiddenFlightDate');
+            
+            selectedFlightDateElement.textContent = dateString;
+            hiddenFlightDateElement.value = dateString;
+            
+            modal.classList.add('active');
+            document.body.style.overflow = 'hidden';
+        }
+
+        // Calendar functionality
+        let currentDate = new Date(2025, 6, 1); // July 2025
+        const monthNames = ["Janeiro", "Fevereiro", "Março", "Abril", "Maio", "Junho",
+                               "Julho", "Agosto", "Setembro", "Outubro", "Novembro", "Dezembro"];
+        const dayNames = ["Dom", "Seg", "Ter", "Qua", "Qui", "Sex", "Sáb"];
+
+        const scheduledFlights = [
+            new Date(2025, 6, 3),  // July 3, 2025 (completed)
+            new Date(2025, 6, 18), // July 18, 2025 (completed)
+            
+            new Date(2025, 7, 11), // August 11, 2025 (completed)
+            new Date(2025, 8, 3),  // September 3, 2025
+            new Date(2025, 8, 18), // September 18, 2025
+            new Date(2025, 9, 1),  // October 1, 2025
+            new Date(2025, 9, 17), // October 17, 2025
+            new Date(2025, 9, 29), // October 29, 2025
+        ];
+
+        function generateCalendar() {
+            const grid = document.getElementById('calendarGrid');
+            const monthTitle = document.getElementById('currentMonth');
+            
+            monthTitle.textContent = `${monthNames[currentDate.getMonth()]} ${currentDate.getFullYear()}`;
+            
+            // Clear grid
+            grid.innerHTML = '';
+            
+            // Add day headers
+            dayNames.forEach(day => {
+                const dayHeader = document.createElement('div');
+                dayHeader.className = 'calendar-day font-bold text-gray-600 bg-gray-100';
+                dayHeader.textContent = day;
+                grid.appendChild(dayHeader);
+            });
+            
+            // Get first day of month and number of days
+            const firstDay = new Date(currentDate.getFullYear(), currentDate.getMonth(), 1);
+            const lastDay = new Date(currentDate.getFullYear(), currentDate.getMonth() + 1, 0);
+            const startDate = new Date(firstDay);
+            startDate.setDate(startDate.getDate() - firstDay.getDay());
+            
+            // Generate calendar days
+            for (let i = 0; i < 42; i++) {
+                const cellDate = new Date(startDate);
+                cellDate.setDate(startDate.getDate() + i);
+                
+                const dayCell = document.createElement('div');
+                dayCell.className = 'calendar-day';
+                dayCell.textContent = cellDate.getDate();
+                
+                // Check if day is in current month
+                if (cellDate.getMonth() !== currentDate.getMonth()) {
+                    dayCell.classList.add('other-month');
+                }
+                
+                // Check for scheduled flights
+                const isScheduled = scheduledFlights.some(flight => 
+                    flight.getFullYear() === cellDate.getFullYear() &&
+                    flight.getMonth() === cellDate.getMonth() &&
+                    flight.getDate() === cellDate.getDate()
+                );
+                
+                if (isScheduled) {
+                    // A lista de voos concluídos para verificação
+                    const completedFlights = [
+                        new Date(2025, 6, 3), 
+                        new Date(2025, 6, 18), 
+                        new Date(2025, 7, 11),
+                    ];
+
+                    const isCompleted = completedFlights.some(completedFlight => 
+                        completedFlight.getFullYear() === cellDate.getFullYear() &&
+                        completedFlight.getMonth() === cellDate.getMonth() &&
+                        completedFlight.getDate() === cellDate.getDate()
+                    );
+
+                    if (isCompleted) {
+                        dayCell.classList.add('completed');
+                    } else {
+                        dayCell.classList.add('scheduled');
+                        dayCell.addEventListener('click', () => openModal(cellDate));
+                    }
+                }
+                
+                grid.appendChild(dayCell);
+            }
+        }
+
+        function prevMonth() {
+            currentDate.setMonth(currentDate.getMonth() - 1);
+            generateCalendar();
+        }
+
+        function nextMonth() {
+            currentDate.setMonth(currentDate.getMonth() + 1);
+            generateCalendar();
+        }
+
+        // Modal functionality
+        function openModal(flightDate) {
+            const modal = document.getElementById('cargoModal');
+            const selectedFlightDateElement = document.getElementById('selectedFlightDate');
+            const hiddenFlightDateElement = document.getElementById('hiddenFlightDate');
+            
+            const formattedDate = flightDate.toLocaleDateString('pt-BR');
+            selectedFlightDateElement.textContent = formattedDate;
+            hiddenFlightDateElement.value = formattedDate;
+            
+            modal.classList.add('active');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeModal() {
+            const modal = document.getElementById('cargoModal');
+            modal.classList.remove('active');
+            document.body.style.overflow = 'auto';
+            
+            // Reset form and show form section
+            document.getElementById('cargoForm').reset();
+            document.getElementById('modalForm').style.display = 'block';
+            document.getElementById('successMessage').style.display = 'none';
+        }
+
+        // Form submission
+        document.getElementById('cargoForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            const submitBtn = document.querySelector('.submit-btn');
+            const btnText = document.querySelector('.btn-text');
+            const spinner = document.querySelector('.loading-spinner');
+            
+            // Show loading state
+            submitBtn.disabled = true;
+            spinner.style.display = 'inline-block';
+            btnText.textContent = 'Enviando...';
+            
+            try {
+                const formData = new FormData(this);
+                
+                const response = await fetch(this.action, {
+                    method: 'POST',
+                    body: formData,
+                    headers: {
+                        'Accept': 'application/json'
+                    }
+                });
+                
+                if (response.ok) {
+                    // Show success message
+                    document.getElementById('modalForm').style.display = 'none';
+                    document.getElementById('successMessage').style.display = 'block';
+                    
+                    // Auto close after 3 seconds
+                    setTimeout(() => {
+                        closeModal();
+                    }, 3000);
+                } else {
+                    throw new Error('Erro no envio');
+                }
+            } catch (error) {
+                alert('Erro ao enviar solicitação. Tente novamente.');
+                console.error('Error:', error);
+            } finally {
+                // Reset button state
+                submitBtn.disabled = false;
+                spinner.style.display = 'none';
+                btnText.textContent = 'Enviar Solicitação';
+            }
+        });
+
+        // Close modal when clicking outside
+        document.getElementById('cargoModal').addEventListener('click', function(e) {
+            if (e.target === this) {
+                closeModal();
+            }
+        });
+
+        // Close modal with Escape key
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') {
+                closeModal();
+            }
+        });
+
+        // Accordion functionality
+        function toggleAccordion(id) {
+            const content = document.getElementById(id + '-content');
+            const icon = document.getElementById(id + '-icon');
+            
+            if (content.classList.contains('active')) {
+                content.classList.remove('active');
+                icon.classList.remove('fa-chevron-up');
+                icon.classList.add('fa-chevron-down');
+            } else {
+                content.classList.add('active');
+                icon.classList.remove('fa-chevron-down');
+                icon.classList.add('fa-chevron-up');
+            }
+        }
+
+        // Initialize calendar and capacity
+        generateCalendar();
+        updateCapacityDisplay();
+
+        // Smooth scrolling
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                document.querySelector(this.getAttribute('href')).scrollIntoView({
+                    behavior: 'smooth'
+                });
+            });
+        });
+
+        // Carousel functionality
+        let currentSlide = 0;
+        const slides = document.querySelectorAll('.carousel-slide');
+        const indicators = document.querySelectorAll('.carousel-indicator');
+
+        function showSlide(index) {
+            slides.forEach((slide, i) => {
+                slide.classList.toggle('active', i === index);
+            });
+            indicators.forEach((dot, i) => {
+                dot.classList.toggle('active', i === index);
+            });
+            currentSlide = index;
+        }
+
+        function changeSlide(direction) {
+            let newIndex = (currentSlide + direction + slides.length) % slides.length;
+            showSlide(newIndex);
+        }
+
+        function goToSlide(index) {
+            showSlide(index);
+        }
+
+        // Auto slide change every 5 seconds
+        setInterval(() => {
+            changeSlide(1);
+        }, 15000);
+
+        // Initialize carousel
+        showSlide(currentSlide);
+    </script>
+</body>
+</html>
