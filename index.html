@@ -967,7 +967,7 @@ capacity-bar-container {
                 </div>
                 <div class="frequency-badge">
                     <i class="fas fa-calendar-alt mr-2"></i>
-                    Próximo voo: 21/08/2025
+                    Próximo voo: 05/09/2025
                 </div>
             </div>
         </div>
@@ -1050,9 +1050,6 @@ capacity-bar-container {
                                 <i class="fas fa-calendar"></i>
                                 05/09/2025
                             </div>
-
-
-
 
                             <div>   
                             <div class="cutoff-date">
@@ -1170,12 +1167,85 @@ capacity-bar-container {
                                 Cut Off da carga: 24 horas
                             </div>
                             </div> 
-
-
-
-
-
                         </div>
+
+
+
+<div class="flight-item" onclick="openModalForDate('13/11/2025')">
+                            <div class="flight-date">
+                                <i class="fas fa-calendar"></i>
+                                13/11/2025
+                            </div>
+
+
+
+
+                            <div>   
+                            <div class="cutoff-date">
+                                <i class="fas fa-clock"></i>
+                                Cut Off documental: 11/11- 48horas
+                            </div>
+                            <div class="cutoff-date">
+                                <i class="fas fa-clock"></i>
+                                Cut Off da carga: 24 horas
+                            </div>
+                            </div> 
+                        </div>
+
+
+<div class="flight-item" onclick="openModalForDate('26/11/2025')">
+                            <div class="flight-date">
+                                <i class="fas fa-calendar"></i>
+                                26/11/2025
+                            </div>
+
+
+
+
+                            <div>   
+                            <div class="cutoff-date">
+                                <i class="fas fa-clock"></i>
+                                Cut Off documental: 24/11- 48horas
+                            </div>
+                            <div class="cutoff-date">
+                                <i class="fas fa-clock"></i>
+                                Cut Off da carga: 24 horas
+                            </div>
+                            </div> 
+                        </div>
+
+
+<div class="flight-item" onclick="openModalForDate('11/12/2025')">
+                            <div class="flight-date">
+                                <i class="fas fa-calendar"></i>
+                                11/12/2025
+                            </div>
+
+
+
+
+                            <div>   
+                            <div class="cutoff-date">
+                                <i class="fas fa-clock"></i>
+                                Cut Off documental: 09/12- 48horas
+                            </div>
+                            <div class="cutoff-date">
+                                <i class="fas fa-clock"></i>
+                                Cut Off da carga: 24 horas
+                            </div>
+                            </div> 
+                        </div>
+
+
+
+
+
+
+
+
+
+
+
                     </div>
                 </div>
                 
@@ -1184,7 +1254,7 @@ capacity-bar-container {
                     <div class="capacity-header">
                         <div class="capacity-title">
                             <i class="fas fa-weight-hanging mr-2"></i>
-                            Capacidade Lower Deck disponível para o próximo voo
+                            Capacidade Lower Deck disponível para o próximo voo do dia 05/09
                         </div>
                         <div class="capacity-subtitle">Monitoramento da capacidade de carga disponível</div>
                     </div>
@@ -1196,6 +1266,7 @@ capacity-bar-container {
                     </div>
                     
                     <div class="capacity-details">
+
                         <div class="capacity-item">
                             <div class="capacity-value capacity-used" id="usedCapacity">13.000kg</div>
                             <div>Ocupado</div>
@@ -1212,7 +1283,7 @@ capacity-bar-container {
                     
                     <div class="capacity-warning" id="capacityWarning">
                         <i class="fas fa-exclamation-triangle mr-2"></i>
-                        Atenção: Capacidade quase esgotada! Reserve seu espaço rapidamente.
+                        Atenção: Capacidade se esgotando! Reserve seu espaço rapidamente.
                     </div>
                     
                     <div class="text-center mt-4 text-sm text-gray-600">
@@ -1615,8 +1686,8 @@ capacity-bar-container {
         // CAPACITIES CONFIGURATION - EDIT HERE TO UPDATE CAPACITY
         const CAPACITY_CONFIG = {
             totalCapacity: 20000, // Total capacity in kg
-            usedCapacity: 19000,  // Used capacity in kg - UPDATE THIS VALUE MANUALLY
-            warningThreshold: 85  // Show warning when capacity reaches this percentage
+            usedCapacity: 10000,  // Used capacity in kg - UPDATE THIS VALUE MANUALLY
+            warningThreshold: 45  // Show warning when capacity reaches this percentage
         };
 
         // FLIGHT DATES CONFIGURATION - ADD NEW FLIGHTS HERE
@@ -1625,7 +1696,13 @@ capacity-bar-container {
             { date: '18/09/2025', cutoff: '15/09' },
             { date: '01/10/2025', cutoff: '27/09' },
             { date: '17/10/2025', cutoff: '13/10' },
-            { date: '29/10/2025', cutoff: '25/10' }
+            { date: '29/10/2025', cutoff: '25/10' },
+
+            { date: '13/11/2025', cutoff: '11/11' },
+            { date: '26/11/2025', cutoff: '24/11' },
+            { date: '11/12/2025', cutoff: '09/12' }
+
+
             // ADD NEW FLIGHTS HERE IN THE FUTURE
             // { date: 'DD/MM/YYYY', cutoff: 'DD/MM' }
         ];
@@ -1696,6 +1773,13 @@ capacity-bar-container {
             new Date(2025, 9, 1),  // October 1, 2025
             new Date(2025, 9, 17), // October 17, 2025
             new Date(2025, 9, 29), // October 29, 2025
+
+            new Date(2025, 10, 13), // October 29, 2025
+            new Date(2025, 10, 26), // October 29, 2025
+            new Date(2025, 11, 11), // October 29, 2025
+
+
+
         ];
 
         function generateCalendar() {
